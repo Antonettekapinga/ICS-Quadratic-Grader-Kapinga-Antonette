@@ -50,6 +50,26 @@ button {
 button:hover {
   background-color: #084cd6;
 }
+#grading-section input {
+  width: 100%;
+  padding: 8px;
+  margin: 6px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+#grading-section button {
+  background-color: #0b5fff;
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#grading-section button:hover {
+  background-color: #084cd6;
+}
     </style>
 </head>
 <body>
@@ -82,7 +102,17 @@ button:hover {
     <!--Grading System Section (to be added later)-->
     <section id="grading-section">
         <h2>Grading System</h2>
-        <p>Coming soon...</p>
+     <p>Enter a score (0 – 100) to find the letter grade:</p>
+
+  <form id="gradeForm">
+    <label for="score">Score:</label>
+    <input type="number" id="score" required placeholder="Enter score" min="0" max="100">
+    <br><br>
+    <button type="button" id="gradeBtn">Get Grade</button>
+    <button type="button" id="resetGradeBtn">Clear</button>
+  </form>
+
+  <div id="gradeResult" style="margin-top: 20px; font-weight: bold;"></div>
     </section>
 </div>
 <footer>
@@ -152,6 +182,57 @@ button:hover {
   // Event listeners for buttons
   solveBtn.addEventListener("click", solveQuadratic);
   clearBtn.addEventListener("click", clearFields);
+  // =============================
+  //  GRADING SYSTEM SCRIPT
+  // =============================
+
+  // Select elements
+  const scoreInput = document.getElementById("score");
+  const gradeBtn = document.getElementById("gradeBtn");
+  const resetGradeBtn = document.getElementById("resetGradeBtn");
+  const gradeResult = document.getElementById("gradeResult");
+
+  // Function to calculate grade
+  function getGrade() {
+    const scoreValue = parseFloat(scoreInput.value);
+
+    // Validation
+    if (isNaN(scoreValue)) {
+      gradeResult.style.color = "red";
+      gradeResult.textContent = "Please enter a valid number.";
+      return;
+    }
+
+    if (scoreValue < 0 || scoreValue > 100) {
+      gradeResult.style.color = "red";
+      gradeResult.textContent = "Score must be between 0 and 100.";
+      return;
+    }
+
+    // Determine letter grade
+    let grade = "";
+    if (scoreValue >= 85 && scoreValue <= 100) grade = "A+";
+    else if (scoreValue >= 75) grade = "A";
+    else if (scoreValue >= 65) grade = "B+";
+    else if (scoreValue >= 60) grade = "B";
+    else if (scoreValue >= 55) grade = "C+";
+    else if (scoreValue >= 50) grade = "C";
+    else grade = "D";
+
+    // Display result
+    gradeResult.style.color = "black";
+    gradeResult.textContent = `Score: ${scoreValue} → Grade: ${grade}`;
+  }
+
+  // Clear function
+  function clearGrade() {
+    scoreInput.value = "";
+    gradeResult.textContent = "";
+  }
+
+  // Event listeners
+  gradeBtn.addEventListener("click", getGrade);
+  resetGradeBtn.addEventListener("click", clearGrade);
 </script>
 
 </body>
